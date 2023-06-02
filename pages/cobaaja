@@ -1,0 +1,128 @@
+import { useState } from 'react';
+import axios from 'axios';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+export default function Home() {
+  const [addresses, setAddresses] = useState([]);
+
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/v1/data-house');
+      setAddresses(response.data);
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+    }
+  };
+
+  // Create a state variable to store the selected address value
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  // Define an onChange handler function that updates the state variable with the selected value
+  const handleChange = (event) => {
+    setSelectedAddress(event.target.value);
+  };
+
+  return (
+    <div>
+      <button onClick={fetchAddresses}>Fetch Addresses</button>
+      <Select
+        label="Alamat"
+        value={selectedAddress}
+        onChange={handleChange}
+      >
+        {addresses.map((address) => (
+          <MenuItem 
+          key={address.ID} 
+          value={{ lat: address.Lat, long: address.Long }}>
+            {address.Alamat}
+          </MenuItem>
+        ))}
+      </Select>
+    </div>
+
+    
+  );
+}
+
+
+
+
+
+//coba
+// Create another state variable to store the selected coordinates
+const [selectedCoordinates, setSelectedCoordinates] = useState(null);
+
+// Define an onChange handler function that updates both state variables with the selected value and coordinates
+const handleChange = (event) => {
+  setSelectedAddress(event.target.value);
+  setSelectedCoordinates(event.target.getAttribute('data-coordinates'));
+};
+
+// Use a custom display function to render the name of the address in the textbox
+const renderValue = (value) => {
+  const address = addresses.find((address) => address.Alamat === value);
+  return address ? address.Alamat : '';
+};
+
+return (
+  <div>
+    <button onClick={fetchAddresses}>Fetch Addresses</button>
+    <Select
+      label="Alamat"
+      value={selectedAddress}
+      onChange={handleChange}
+      renderValue={renderValue}
+    >
+      {addresses.map((address) => (
+        <MenuItem key={address.ID} value={address.Alamat} data-coordinates={{ lat: address.Lat, long: address.Long }}>
+          {address.Alamat}
+        </MenuItem>
+      ))}
+    </Select>
+  </div>
+);
+
+//react select
+
+import { useState } from 'react';
+import axios from 'axios';
+import Select from 'react-select';
+
+export default function Home() {
+  const [addresses, setAddresses] = useState([]);
+
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/v1/data-house');
+      // Format the addresses array into an array of objects with label and value properties
+      const formattedAddresses = response.data.map((address) => ({
+        label: address.Alamat,
+        value: { lat: address.Lat, long: address.Long },
+      }));
+      setAddresses(formattedAddresses);
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+    }
+  };
+
+  // Create a state variable to store the selected address value
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  // Define an onChange handler function that updates the state variable with the selected value
+  const handleChange = (selectedOption) => {
+    setSelectedAddress(selectedOption);
+  };
+
+  return (
+    <div>
+      <button onClick={fetchAddresses}>Fetch Addresses</button>
+      <Select
+        label="Alamat"
+        value={selectedAddress}
+        onChange={handleChange}
+        options={addresses} // Pass the formatted addresses array as the options prop
+      />
+    </div>
+  );
+}
