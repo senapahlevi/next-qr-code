@@ -8,7 +8,7 @@ export default function Home() {
 
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/data-house');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data-house`);
       setAddresses(response.data);
     } catch (error) {
       console.error('Error fetching addresses:', error);
@@ -94,7 +94,7 @@ export default function Home() {
 
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/data-house');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/data-house`);
       // Format the addresses array into an array of objects with label and value properties
       const formattedAddresses = response.data.map((address) => ({
         label: address.Alamat,
