@@ -82,8 +82,8 @@ function AllData() {
 
       <main class=" my-12 relative max-w-l mx-auto rounded">
           {addresses.map((address) => (
-        <div class="max-w-sm px-5 mx-auto relative bg-gray-100 block rounded-lg">
-            <div key={address.ID} className="mt-5 ">
+        <div key={address.ID}  className="max-w-sm px-5 mx-auto relative bg-gray-100 block rounded-lg">
+            <div className="mt-5 ">
               <div className="">
                 <h3>Tipe Rumah: {address.Tipe}</h3>
               </div>
