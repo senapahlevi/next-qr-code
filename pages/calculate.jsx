@@ -60,7 +60,7 @@ function Calculate() {
         calculates
       );
       setResult(response.data);
-
+      setStatusResult(true);
       fetchAddresses();
     } catch (error) {
       console.error("Error saving address:", error);
@@ -146,8 +146,8 @@ function Calculate() {
               </div>
             </div>
           </div>
-          <div className="px-5 mt-12">
-            <div className="flex justify-center gap-1">
+          <div className="px-5 py-5">
+            <div className="flex justify-center gap-1 mt-5">
               <button
                 type="button"
                 className="flex w-64 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -156,9 +156,9 @@ function Calculate() {
                 Kalkulasi Jarak
               </button>
             </div>
-            {result ? (
+            { statusResult == true ? (
               <div>
-                <div className="flex justify-center gap-1">
+                <div className="flex justify-center gap-1 mt-5">
                   euclidean:{result.euclidean} 
                 </div>
                 <div className="flex justify-center gap-1">
@@ -166,7 +166,7 @@ function Calculate() {
                 </div>
               </div>
             ) : (
-              <div>jje</div>
+              <div></div>
             )}
 
             <div></div>

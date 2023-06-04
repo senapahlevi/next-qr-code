@@ -94,7 +94,7 @@ function AllData() {
                 <p>Longitude: {address.Long}</p>
                 <p>Latitude: {address.Lat}</p>
               </p>
-              <div className="px-2">
+              <div className="px-2 py-5">
                 <div className="flex justify-center gap-1">
                   <button
                     onClick={() => handleEdit(address.ID)}

@@ -120,7 +120,7 @@ function HomeAddress() {
         Cari Rute 
       </h2>
 
-      <main class=" my-12 relative max-w-md mx-auto rounded bg-gray-100">
+      <main class="px-5 my-12 relative max-w-md mx-auto rounded bg-gray-100">
         <div>
           <label
             class="block text-sm font-medium leading-6 text-gray-900"
