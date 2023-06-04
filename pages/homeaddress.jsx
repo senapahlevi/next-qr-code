@@ -114,15 +114,15 @@ function HomeAddress() {
   };
 
   return (
-    <div>
+    <div className="bg-grey-50 mb-10">
+
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Cari Rute Rumah Kamu
+        Cari Rute 
       </h2>
 
-      <form class="space-y-6" action="#" method="POST">
+      <main class=" my-12 relative max-w-md mx-auto rounded bg-gray-100">
         <div>
           <label
-            for="email"
             class="block text-sm font-medium leading-6 text-gray-900"
           >
             Tambah Alamat Baru
@@ -152,7 +152,7 @@ function HomeAddress() {
                 <label class="block text-sm font-medium leading-6 text-gray-900">
                   Tipe Rumah
                 </label>
-                <div class="mt-2">
+                <div class="mt-2 bg-gray-100">
                   <input
                     type="number"
                     value={Tipe}
@@ -166,8 +166,8 @@ function HomeAddress() {
           </div>
         </div>
 
-        <div className="px-5">
-          <div className="grid grid-cols-1 gap-1">
+        <div className="px-5 py-5">
+        <div className="flex justify-center gap-1">
             <button
               type="button"
               onClick={handleSave}
@@ -178,7 +178,7 @@ function HomeAddress() {
 
           </div>
         </div>
-      </form>
+      </main>
       <div></div>
     </div>
   );

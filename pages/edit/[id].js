@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { Autocomplete, TextField } from "@mui/material";
+import Header from "../header";
 
 function EditData() {
   const [searchResults, setSearchResults] = React.useState([]);
@@ -20,10 +21,6 @@ function EditData() {
   }, [id]);
   const Alamat = streetAddress;
 
-  //     const handleInputChange = (event, newInputValue) => {
-  //     setInputValue(newInputValue); // update the input value
-  //     handleSearch(newInputValue); // perform the search
-  //   };
   const fetchAddress = async () => {
     try {
       const response = await axios.get(
@@ -75,24 +72,17 @@ function EditData() {
   };
 
   return (
-    <div>
-      <div className="block rounded-lg bg-red-50 dark:bg-neutral-700">
-        <div className="p-6">
-          <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-            Edit Data Rute
-          </h5>
+    <div className="bg-grey-50 mb-10">
+      <Header />
 
-          <div className="px-2 mb-5"></div>
-        </div>
-      </div>
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Edit Rute
+      </h2>
 
-      <main class="space-y-6" >
-        <div>
-          <label
-            for="email"
-            class="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Tambah Alamat Baru
+      <main class=" my-12 relative max-w-l mx-auto rounded">
+        <div class="max-w-sm px-5 mx-auto relative bg-gray-100 block rounded-lg">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+           Edit Rute
           </label>
           <div class="mt-2">
             <div>
@@ -115,19 +105,19 @@ function EditData() {
                   )}
                 />
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="px-5">
-          <div className="grid grid-cols-3 gap-1">
-            <button
-              type="button"
-              onClick={handleUpdate}
-              className="flex w-64 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Update
-            </button>
+              <div className="px-5 py-5">
+                <div className="flex justify-center gap-1">
+                  <button
+                    type="button"
+                    onClick={handleUpdate}
+                    className="flex w-64 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

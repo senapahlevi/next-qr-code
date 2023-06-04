@@ -76,9 +76,13 @@ function AllData() {
         </div>
       </div> */}
 
-      <main class="py-28 relative z-20 max-w-l mx-auto">
-        <div class="max-w-sm px-4 mx-auto">
+<h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Data Rute 
+      </h2>
+
+      <main class=" my-12 relative max-w-l mx-auto rounded">
           {addresses.map((address) => (
+        <div class="max-w-sm px-5 mx-auto relative bg-gray-100 block rounded-lg">
             <div key={address.ID} className="mt-5 ">
               <div className="">
                 <h3>Tipe Rumah: {address.Tipe}</h3>
@@ -95,22 +99,22 @@ function AllData() {
                   <button
                     onClick={() => handleEdit(address.ID)}
                     type="button"
-                    className="flex w-48 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="flex w-48 justify-center rounded-md bg-indigo-300 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(address.ID)}
                     type="button"
-                    className="flex w-48 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                    className="flex w-48 justify-center rounded-md bg-red-300 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                   >
                     Delete
                   </button>
                 </div>
               </div>
             </div>
-          ))}
         </div>
+          ))}
       </main>
     </div>
   );
