@@ -12,24 +12,25 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Header from "./header";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 function Calculate() {
   const router = useRouter();
-
-  const handleViewAllData = () => {
-    router.push("/all-data");
-  };
+ 
 
   const [dataOrigin, setDataOrigin] = useState([]);
   const [dataDestination, setDataDestination] = useState([]);
-  const [Tipe, setTipe] = useState("");
-  const [Long, setLong] = useState("");
-  const [Lat, setLat] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [originID, setOriginID] = useState(0);
+
   const [result, setResult] = useState([]);
   const [statusResult, setStatusResult] = useState(false);
-  const [selectedOption, setSelectedOption] = React.useState(null);
+  const [locationOrigin, setLocationOrigin] = React.useState({
+    lat: -6.1896095,
+    lng: 106.6798958,
+  }); 
+  const [locationDestination, setLocationDestination] = React.useState({
+    lat: -6.1896095,
+    lng: 107.6798958,
+  }); 
   const [selectListOrigin, setSelectListOrigin] = React.useState(null);
   const [selectListDestination, setSelectListDestination] =
     React.useState(null);
@@ -49,6 +50,7 @@ function Calculate() {
       console.error("Error fetching dataOrigin:", error);
     }
   };
+  
 
   const handleCalculate = async (value) => {
     const destinationid = selectListDestination;
@@ -69,9 +71,15 @@ function Calculate() {
   console.log(result, "hello result");
   const handleChooseOrigin = (e) => {
     setSelectListOrigin(e.target.value);
+    setLocationOrigin()
   };
   const handleChooseDestination = (e) => {
     setSelectListDestination(e.target.value);
+  };
+
+  const containerStyle = {
+    width: "400px",
+    height: "400px",
   };
 
   return (
@@ -173,11 +181,20 @@ function Calculate() {
           </div>
         </div>
       </main>
+      {/* <div class="px-5 my-12 relative max-w-md mx-auto rounded bg-gray-100">
+        <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0">
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={locationOrigin}
+            zoom={13}
+          >
+            <MarkerF position={locationOrigin} />
+            <MarkerF position={locationDestination} />
+            <></>
+          </GoogleMap>
+        </LoadScript>
+      </div> */}
 
-      {/* {
-    "haversine": "1.0172345558436935",
-    "euclidean": "0.009174526396495703"
-} */}
     </div>
   );
 }

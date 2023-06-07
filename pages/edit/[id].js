@@ -81,6 +81,7 @@ function EditData() {
 
       <main class=" my-12 relative max-w-l mx-auto rounded">
         <div class="max-w-sm px-5 mx-auto relative bg-gray-100 block rounded-lg">
+         <p className="font-medium">Alamat saat ini: </p>
           <label className="block text-sm font-medium leading-6 text-gray-900">
            Edit Rute
           </label>
