@@ -179,27 +179,27 @@ function MapCalculate() {
         </div>
       </main>
       <div class="my-12 relative max-w-l mx-auto rounded ">
-        <div class="max-w-sm px-5 mx-auto relative block rounded-lg bg-gray-100">
+        <div class="py-5 max-w-md px-5 mx-auto relative block rounded-lg bg-gray-100">
           {statusResult == true ? (
             <div>
-              <div className="places-container">
-                <PlacesAutocomplete setSelected={setSelected} />
-              </div>
+            
               {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
               <GoogleMap
-                zoom={16}
-                center={selected}
+                zoom={10}
+                center={{lat: result.origin_lat, lng: result.origin_long}}
                 mapContainerStyle={containerStyle}
                 googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
               >
                 {/* {selected && <Marker position={selected} />} */}
-                {selected && <MarkerF position={selected} />}
+                {statusResult && <MarkerF position={{lat: result.destination_lat, lng: result.destination_long}} />}
+                {result.destination_lat && <MarkerF position={{lat: result.origin_lat, lng: result.origin_long}} />}
+                {result.other_lat && <MarkerF position={{lat: 0, lng: 0}} />}
               </GoogleMap>
               <div className="flex justify-center gap-1 mt-5">
-                euclidean:{result.euclidean}
+                Euclidean: {result.euclidean}
               </div>
               <div className="flex justify-center gap-1">
-                jarak:{result.haversine} km
+                Jarak: {result.haversine} km
               </div>
             </div>
           ) : (
@@ -211,50 +211,3 @@ function MapCalculate() {
   );
 }
 
-
-const PlacesAutocomplete = ({ setSelected }) => {
-  const {
-    ready,
-    value,
-    setValue,
-    suggestions: { status, data },
-    clearSuggestions,
-  } = usePlacesAutocomplete();
-
-  const handleSelect = async (address) => {
-    setValue(address, false);
-    clearSuggestions();
-
-    const results = await getGeocode({ address });
-    const { lat, lng } = await getLatLng(results[0]);
-    setSelected({ lat, lng });
-    console.log("horree", lat, lng);
-  };
-
-  return (
-    <div className="relative w-full">
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={!ready}
-        className="border rounded p-2 w-full focus:outline-none"
-        placeholder="Search an address"
-      />
-      <div className="absolute z-10 bg-white shadow border rounded">
-        <ul className="list-none p-0">
-          {status === "OK" &&
-            data.map(({ place_id, description }) => (
-              <li
-                key={place_id}
-                value={description}
-                className="p-2 hover:bg-gray-100"
-                onClick={() => handleSelect(description)}
-              >
-                {description}
-              </li>
-            ))}
-        </ul>
-      </div>
-    </div>
-  );
-};

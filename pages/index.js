@@ -3,7 +3,6 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import HomeAddress from './homeaddress'
 import Header from './header'
-import Coba from './coba'
 import { useRef, useState } from 'react'
 async function initMap() {
 
@@ -21,7 +20,6 @@ export default function Home() {
       </Head> */}
       <Header />
      <HomeAddress />
-     {/* <Coba /> */}
-    </div>
+      </div>
   )
 }
