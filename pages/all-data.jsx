@@ -48,7 +48,7 @@ function AllData() {
     <div className="bg-grey-50 mb-10">
       <Header />
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Data Rute
+        Data Alamat Rumah
       </h2>
 
       <main class=" my-12 relative max-w-l mx-auto rounded">

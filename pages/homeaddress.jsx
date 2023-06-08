@@ -3,9 +3,12 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { GoogleMap, LoadScript, MarkerF,Autocomplete, useLoadScript } from "@react-google-maps/api";
-import Head from "next/head";
-import Script from "next/script";
+import {
+  GoogleMap,
+   MarkerF,
+   useLoadScript,
+} from "@react-google-maps/api";
+ 
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -16,7 +19,6 @@ export default function HomeAddress() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
- 
 
   if (!isLoaded) return <div>Loading...</div>;
   return <Maps />;
@@ -26,20 +28,15 @@ function Maps() {
   const [Tipe, setTipe] = useState("");
   const [Long, setLong] = useState("");
   const [Lat, setLat] = useState("");
- 
+
   const [inputAlamat, setInputAlamat] = React.useState("");
-
-
-
-
-
 
   useEffect(() => {
     // fetchAddresses();
-    if(selected){
+    if (selected) {
       const latitude = parseFloat(selected.lat);
       const longitude = parseFloat(selected.lng);
-      
+
       setLat(latitude.toString());
       setLong(longitude.toString());
     }
@@ -49,18 +46,16 @@ function Maps() {
     width: "400px",
     height: "400px",
   };
- 
 
   const handleSave = async () => {
     const Alamat = inputAlamat;
     try {
-
       const newAddress = { Alamat, Tipe, Long, Lat };
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
         newAddress
       );
-      console.log(Alamat, Tipe, Long, Lat,"hello handle save")
+      console.log(Alamat, Tipe, Long, Lat, "hello handle save");
       setTipe("");
       setLong("");
       setLat("");
@@ -68,13 +63,11 @@ function Maps() {
       console.error("Error saving address:", error);
     }
   };
-  
+
   return (
     <div className="bg-grey-50 mb-10">
-   
-     
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Cari Rute
+        Alamat Rumah
       </h2>
       <main class="px-5 my-12 relative max-w-md mx-auto rounded bg-gray-100">
         <div>
@@ -83,24 +76,24 @@ function Maps() {
           </label>
           <div class="mt-2">
             <div>
-      
-  <div className="places-container">
-        <PlacesAutocomplete setSelected={setSelected} setInputAlamat={setInputAlamat} />
-      </div>
+              <div className="places-container">
+                <PlacesAutocomplete
+                  setSelected={setSelected}
+                  setInputAlamat={setInputAlamat}
+                />
+              </div>
 
-      {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
-
-      <GoogleMap
-        zoom={16}
-        center={selected}
-        mapContainerStyle={containerStyle}
-        googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
-      >
-        {/* {selected && <Marker position={selected} />} */}
-        {selected && <MarkerF position={selected} />}
-      </GoogleMap>
-              <div>
-             
+              {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
+              <div className="py-10 ">
+              <GoogleMap
+                zoom={16}
+                center={selected}
+                mapContainerStyle={containerStyle}
+                googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
+              >
+                {/* {selected && <Marker position={selected} />} */}
+                {selected && <MarkerF position={selected} />}
+              </GoogleMap>
               </div>
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900">
@@ -111,8 +104,8 @@ function Maps() {
                     type="number"
                     value={Tipe}
                     onChange={(e) => setTipe(e.target.value)}
-                    id="email"
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    id="tipe"
+                    class="mx-auto bg-white rounded-full h-18 lg:max-w-none border block w-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -132,13 +125,11 @@ function Maps() {
           </div>
         </div>
       </main>
-
     </div>
   );
 }
 
-
-const PlacesAutocomplete = ({ setSelected,setInputAlamat }) => {
+const PlacesAutocomplete = ({ setSelected, setInputAlamat }) => {
   const {
     ready,
     value,
@@ -159,10 +150,11 @@ const PlacesAutocomplete = ({ setSelected,setInputAlamat }) => {
   return (
     <div className="relative w-full">
       <input
+      
         value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
-        className="border rounded p-2 w-full focus:outline-none"
+        className="max-w-xl mx-auto bg-white rounded-full h-18 lg:max-w-none border rounded p-2 w-full focus:outline-none"
         placeholder="Search an address"
       />
       <div className="absolute z-10 bg-white shadow border rounded">
@@ -183,4 +175,3 @@ const PlacesAutocomplete = ({ setSelected,setInputAlamat }) => {
     </div>
   );
 };
-

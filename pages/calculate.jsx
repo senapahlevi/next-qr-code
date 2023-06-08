@@ -2,21 +2,37 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Autocomplete,
   Box,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import Header from "./header";
-import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 
-function Calculate() {
-  const router = useRouter();
+export default function Calculate() {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
+  });
+
+  if (!isLoaded) return <div>Loading...</div>;
+  return <MapCalculate />;
+}
  
+
+function MapCalculate() {
+  const [selected, setSelected] = useState(null);
+  const [Long, setLong] = useState("");
+  const [Lat, setLat] = useState("");
+
+  const router = useRouter();
 
   const [dataOrigin, setDataOrigin] = useState([]);
   const [dataDestination, setDataDestination] = useState([]);
@@ -26,11 +42,11 @@ function Calculate() {
   const [locationOrigin, setLocationOrigin] = React.useState({
     lat: -6.1896095,
     lng: 106.6798958,
-  }); 
+  });
   const [locationDestination, setLocationDestination] = React.useState({
     lat: -6.1896095,
     lng: 107.6798958,
-  }); 
+  });
   const [selectListOrigin, setSelectListOrigin] = React.useState(null);
   const [selectListDestination, setSelectListDestination] =
     React.useState(null);
@@ -50,7 +66,6 @@ function Calculate() {
       console.error("Error fetching dataOrigin:", error);
     }
   };
-  
 
   const handleCalculate = async (value) => {
     const destinationid = selectListDestination;
@@ -71,7 +86,7 @@ function Calculate() {
   console.log(result, "hello result");
   const handleChooseOrigin = (e) => {
     setSelectListOrigin(e.target.value);
-    setLocationOrigin()
+    setLocationOrigin();
   };
   const handleChooseDestination = (e) => {
     setSelectListDestination(e.target.value);
@@ -90,10 +105,7 @@ function Calculate() {
       </h2>
       <main class="my-12 relative max-w-l mx-auto rounded ">
         <div class="max-w-sm px-5 mx-auto relative block rounded-lg bg-gray-100">
-          <label
-             
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
+          <label className="block text-sm font-medium leading-6 text-gray-900">
             Dari Alamat
           </label>
           <div class="mt-2">
@@ -122,10 +134,7 @@ function Calculate() {
                 </Box>
               </div>
               <div>
-                <label
-              
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label className="block text-sm font-medium leading-6 text-gray-900">
                   Tujuan Alamat{" "}
                 </label>
 
@@ -164,39 +173,88 @@ function Calculate() {
                 Kalkulasi Jarak
               </button>
             </div>
-            { statusResult == true ? (
-              <div>
-                <div className="flex justify-center gap-1 mt-5">
-                  euclidean:{result.euclidean} 
-                </div>
-                <div className="flex justify-center gap-1">
-                  jarak:{result.haversine} km
-                </div>
-              </div>
-            ) : (
-              <div></div>
-            )}
 
             <div></div>
           </div>
         </div>
       </main>
-      {/* <div class="px-5 my-12 relative max-w-md mx-auto rounded bg-gray-100">
-        <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={locationOrigin}
-            zoom={13}
-          >
-            <MarkerF position={locationOrigin} />
-            <MarkerF position={locationDestination} />
-            <></>
-          </GoogleMap>
-        </LoadScript>
-      </div> */}
-
+      <div class="my-12 relative max-w-l mx-auto rounded ">
+        <div class="max-w-sm px-5 mx-auto relative block rounded-lg bg-gray-100">
+          {statusResult == true ? (
+            <div>
+              <div className="places-container">
+                <PlacesAutocomplete setSelected={setSelected} />
+              </div>
+              {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
+              <GoogleMap
+                zoom={16}
+                center={selected}
+                mapContainerStyle={containerStyle}
+                googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
+              >
+                {/* {selected && <Marker position={selected} />} */}
+                {selected && <MarkerF position={selected} />}
+              </GoogleMap>
+              <div className="flex justify-center gap-1 mt-5">
+                euclidean:{result.euclidean}
+              </div>
+              <div className="flex justify-center gap-1">
+                jarak:{result.haversine} km
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Calculate;
+
+const PlacesAutocomplete = ({ setSelected }) => {
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete();
+
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
+
+    const results = await getGeocode({ address });
+    const { lat, lng } = await getLatLng(results[0]);
+    setSelected({ lat, lng });
+    console.log("horree", lat, lng);
+  };
+
+  return (
+    <div className="relative w-full">
+      <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        disabled={!ready}
+        className="border rounded p-2 w-full focus:outline-none"
+        placeholder="Search an address"
+      />
+      <div className="absolute z-10 bg-white shadow border rounded">
+        <ul className="list-none p-0">
+          {status === "OK" &&
+            data.map(({ place_id, description }) => (
+              <li
+                key={place_id}
+                value={description}
+                className="p-2 hover:bg-gray-100"
+                onClick={() => handleSelect(description)}
+              >
+                {description}
+              </li>
+            ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
