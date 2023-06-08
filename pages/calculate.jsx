@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -10,7 +10,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Header from "./header";
 import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
@@ -91,8 +91,8 @@ function Calculate() {
       <main class="my-12 relative max-w-l mx-auto rounded ">
         <div class="max-w-sm px-5 mx-auto relative block rounded-lg bg-gray-100">
           <label
-            for="email"
-            class="block text-sm font-medium leading-6 text-gray-900"
+             
+            className="block text-sm font-medium leading-6 text-gray-900"
           >
             Dari Alamat
           </label>
@@ -123,8 +123,8 @@ function Calculate() {
               </div>
               <div>
                 <label
-                  for="email"
-                  class="block text-sm font-medium leading-6 text-gray-900"
+              
+                  className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Tujuan Alamat{" "}
                 </label>

@@ -1,9 +1,9 @@
-"use client";
+// "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Header from "./header";
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/router";
 
 function AllData() {
   const router = useRouter();

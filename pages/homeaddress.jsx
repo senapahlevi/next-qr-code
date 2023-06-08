@@ -1,106 +1,78 @@
-"use client";
-import React, { useState, useEffect, useMemo } from "react";
+// "use client";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
-import { Autocomplete, TextField } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF,Autocomplete, useLoadScript } from "@react-google-maps/api";
+import Head from "next/head";
+import Script from "next/script";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 
-function HomeAddress() {
-  const [addresses, setAddresses] = useState([]);
+export default function HomeAddress() {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
+  });
+ 
+
+  if (!isLoaded) return <div>Loading...</div>;
+  return <Maps />;
+}
+function Maps() {
+  const [selected, setSelected] = useState(null);
   const [Tipe, setTipe] = useState("");
   const [Long, setLong] = useState("");
   const [Lat, setLat] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [searchResults, setSearchResults] = React.useState([]);
-  const [selectedOption, setSelectedOption] = React.useState(null);
-  const [location, setLocation] = React.useState({
-    lat: -6.1896095,
-    lng: 106.6798958,
-  });
-  // const { isLoaded } = useJsApiLoader({
-  //   // googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-  //   googleMapsApiKey: "AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0",
-  // });
-  const coba = {
-    lat: -7.1896095,
-    lng: 106.6798958,
-  }
-  
+ 
+  const [inputAlamat, setInputAlamat] = React.useState("");
+
+
+
+
+
+
   useEffect(() => {
-    fetchAddresses();
-    if(Lat && Long){
-      const latitude = parseFloat(Lat);
-      const longitude = parseFloat(Long);
-      setLocation({lat: latitude, lng: longitude })
+    // fetchAddresses();
+    if(selected){
+      const latitude = parseFloat(selected.lat);
+      const longitude = parseFloat(selected.lng);
+      
+      setLat(latitude.toString());
+      setLong(longitude.toString());
     }
-  }, [Lat, Long]);
-  // if (!isLoaded) return <div>Loading...</div>;
-  const center = {
-    lat: -6.1896095,
-    lng: 106.6798958,
-  };
+  }, [selected]);
 
   const containerStyle = {
     width: "400px",
     height: "400px",
   };
-  const fetchAddresses = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/data-house`
-      );
-      setAddresses(response.data);
-    } catch (error) {
-      console.error("Error fetching addresses:", error);
-    }
-  };
+ 
 
   const handleSave = async () => {
-    const Alamat = streetAddress;
+    const Alamat = inputAlamat;
     try {
+
       const newAddress = { Alamat, Tipe, Long, Lat };
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
         newAddress
       );
-      // fetchAddresses();
+      console.log(Alamat, Tipe, Long, Lat,"hello handle save")
       setTipe("");
       setLong("");
       setLat("");
-      setSelectedOption(null);
     } catch (error) {
       console.error("Error saving address:", error);
     }
   };
   
-  const handleChange = (event, newValue) => {
-    setSelectedOption(newValue);
-    if (newValue) {
-      // save the lat and lon values from the selected option
-      console.log("lat:", newValue.lat);
-      setLong(newValue.lon);
-      setLat(newValue.lat);
-      setStreetAddress(newValue.display_name);
-      console.log("lon:", newValue.lon);
-
-    }
-  };
-
-  const handleSearch = async (value) => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${value}&format=json&addressdetails=1&limit=5`
-      );
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error("Error saving address:", error);
-    }
-  };
-
-  console.log("hello ini location",location)
   return (
     <div className="bg-grey-50 mb-10">
+   
+     
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
         Cari Rute
       </h2>
@@ -111,29 +83,24 @@ function HomeAddress() {
           </label>
           <div class="mt-2">
             <div>
-              <div className="relative w-full max-w-xl mx-auto bg-white rounded-full h-18 lg:max-w-none">
-                <Autocomplete
-                  id="combo-box-demo"
-                  options={searchResults}
-                  getOptionLabel={(option) => option.display_name}
-                  onInputChange={(event, newInputValue) => {
-                    handleSearch(newInputValue);
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "50px",
-                    },
-                  }}
-                  onChange={handleChange}
-                  value={selectedOption}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Location"
-                      variant="outlined"
-                    />
-                  )}
-                />
+      
+  <div className="places-container">
+        <PlacesAutocomplete setSelected={setSelected} setInputAlamat={setInputAlamat} />
+      </div>
+
+      {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
+
+      <GoogleMap
+        zoom={16}
+        center={selected}
+        mapContainerStyle={containerStyle}
+        googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
+      >
+        {/* {selected && <Marker position={selected} />} */}
+        {selected && <MarkerF position={selected} />}
+      </GoogleMap>
+              <div>
+             
               </div>
               <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900">
@@ -166,21 +133,54 @@ function HomeAddress() {
         </div>
       </main>
 
-      <div class="px-5 my-12 relative max-w-md mx-auto rounded bg-gray-100">
-        <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={location}
-            zoom={13}
-          >
-            <MarkerF position={location} />
-            {/* Child components, such as markers, info windows, etc. */}
-            <></>
-          </GoogleMap>
-        </LoadScript>
-      </div>
     </div>
   );
 }
 
-export default React.memo(HomeAddress);
+
+const PlacesAutocomplete = ({ setSelected,setInputAlamat }) => {
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete();
+
+  const handleSelect = async (address) => {
+    setValue(address, false);
+    clearSuggestions();
+    setInputAlamat(address);
+    const results = await getGeocode({ address });
+    const { lat, lng } = await getLatLng(results[0]);
+    setSelected({ lat, lng });
+  };
+
+  return (
+    <div className="relative w-full">
+      <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        disabled={!ready}
+        className="border rounded p-2 w-full focus:outline-none"
+        placeholder="Search an address"
+      />
+      <div className="absolute z-10 bg-white shadow border rounded">
+        <ul className="list-none p-0">
+          {status === "OK" &&
+            data.map(({ place_id, description }) => (
+              <li
+                key={place_id}
+                value={description}
+                className="p-2 hover:bg-gray-100"
+                onClick={() => handleSelect(description)}
+              >
+                {description}
+              </li>
+            ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
