@@ -1,20 +1,15 @@
 // "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useRouter } from "next/router";
 import Header from "./header";
-import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, MarkerF, useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import { toast } from "react-toastify";
 
 export default function Calculate() {
   const { isLoaded } = useLoadScript({
@@ -25,36 +20,25 @@ export default function Calculate() {
   if (!isLoaded) return <div>Loading...</div>;
   return <MapCalculate />;
 }
- 
 
 function MapCalculate() {
-  const [selected, setSelected] = useState(null);
-  const [Long, setLong] = useState("");
-  const [Lat, setLat] = useState("");
-
-  const router = useRouter();
 
   const [dataOrigin, setDataOrigin] = useState([]);
   const [dataDestination, setDataDestination] = useState([]);
+  const [dataOther, setDataOther] = useState([]);
 
   const [result, setResult] = useState([]);
   const [statusResult, setStatusResult] = useState(false);
-  const [locationOrigin, setLocationOrigin] = React.useState({
-    lat: -6.1896095,
-    lng: 106.6798958,
-  });
-  const [locationDestination, setLocationDestination] = React.useState({
-    lat: -6.1896095,
-    lng: 107.6798958,
-  });
+
+  const [show, setShow] = useState(false);
+
   const [selectListOrigin, setSelectListOrigin] = React.useState(null);
-  const [selectListDestination, setSelectListDestination] =
-    React.useState(null);
-  console.log(selectListOrigin, "hello select");
+  const [selectListDestination, setSelectListDestination] = React.useState(null);
+  const [selectListOther, setSelectListOther] = React.useState(null);
   useEffect(() => {
     fetchAddresses();
   }, []);
-
+console.log(selectListOther,"heeloo selectListOther")
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
@@ -62,6 +46,8 @@ function MapCalculate() {
       );
       setDataOrigin(response.data);
       setDataDestination(response.data);
+      setDataOther(response.data);
+
     } catch (error) {
       console.error("Error fetching dataOrigin:", error);
     }
@@ -70,8 +56,13 @@ function MapCalculate() {
   const handleCalculate = async (value) => {
     const destinationid = selectListDestination;
     const originid = selectListOrigin;
+    const otherid = selectListOther;
+    const other_status = 0;
+    if (selectListOther > 0){
+      other_status = 1;
+    }
     try {
-      const calculates = { originid, destinationid };
+      const calculates = { originid, destinationid, otherid,other_status };
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/calculate-route`,
         calculates
@@ -83,13 +74,20 @@ function MapCalculate() {
       console.error("Error saving address:", error);
     }
   };
-  console.log(result, "hello result");
+
+    // create a function to toggle the visibility of the div
+    const handleClick = () => {
+      setShow(!show);
+      setSelectListOther(null);
+    };
   const handleChooseOrigin = (e) => {
     setSelectListOrigin(e.target.value);
-    setLocationOrigin();
   };
   const handleChooseDestination = (e) => {
     setSelectListDestination(e.target.value);
+  };
+  const handleChooseOther = (e) => {
+    setSelectListOther(e.target.value);
   };
 
   const containerStyle = {
@@ -135,7 +133,7 @@ function MapCalculate() {
               </div>
               <div>
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Tujuan Alamat{" "}
+                  Tujuan Alamat
                 </label>
 
                 <Box sx={{ minWidth: 120 }}>
@@ -149,6 +147,38 @@ function MapCalculate() {
                       onChange={handleChooseDestination}
                     >
                       {dataDestination.map((item) => (
+                        <MenuItem
+                          key={item.ID}
+                          value={item.ID}
+                          // renderValue={renderValue}
+                        >
+                          {item.Alamat}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </div>
+              <div>
+              <button onClick={handleClick}>Tambah Tujuan</button>
+
+              </div>
+              <div hidden={show ? false : true }>
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                   Alamat Lainnya
+                </label>
+
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Alamat Lainnya
+                    </InputLabel>
+                    <Select
+                      label="Other"
+                      value={selectListOther}
+                      onChange={handleChooseOther}
+                    >
+                      {dataOther.map((item) => (
                         <MenuItem
                           key={item.ID}
                           value={item.ID}
@@ -182,21 +212,41 @@ function MapCalculate() {
         <div class="py-5 max-w-md px-5 mx-auto relative block rounded-lg bg-gray-100">
           {statusResult == true ? (
             <div>
-            
               {/* <LoadScript googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"> */}
               <GoogleMap
                 zoom={10}
-                center={{lat: result.origin_lat, lng: result.origin_long}}
+                center={{ lat: result.origin_lat, lng: result.origin_long }}
                 mapContainerStyle={containerStyle}
                 googleMapsApiKey="AIzaSyDM0hoZiuTA5JVkJJeNNjjkd6wlD1JP5C0"
               >
                 {/* {selected && <Marker position={selected} />} */}
-                {statusResult && <MarkerF position={{lat: result.destination_lat, lng: result.destination_long}} />}
-                {result.destination_lat && <MarkerF position={{lat: result.origin_lat, lng: result.origin_long}} />}
-                {result.other_lat && <MarkerF position={{lat: 0, lng: 0}} />}
+                {statusResult && (
+                  <MarkerF
+                    position={{
+                      lat: result.destination_lat,
+                      lng: result.destination_long,
+                    }}
+                  />
+                )}
+                {result.destination_lat && (
+                  <MarkerF
+                    position={{
+                      lat: result.origin_lat,
+                      lng: result.origin_long,
+                    }}
+                  />
+                )}
+                {statusResult && (
+                  <Marker
+                    position={{
+                      lat: result.other_lat,
+                      lng: result.other_long,
+                    }}
+                  />
+                )}
               </GoogleMap>
               <div className="flex justify-center gap-1 mt-5">
-                Euclidean: {result.euclidean}
+                {/* Euclidean: {result.euclidean} */}
               </div>
               <div className="flex justify-center gap-1">
                 Jarak: {result.haversine} km
@@ -210,4 +260,3 @@ function MapCalculate() {
     </div>
   );
 }
-

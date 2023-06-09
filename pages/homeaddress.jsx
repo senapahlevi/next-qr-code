@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import {
   GoogleMap,
    MarkerF,
@@ -55,10 +55,22 @@ function Maps() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
         newAddress
       );
-      console.log(Alamat, Tipe, Long, Lat, "hello handle save");
+      toast.success("Berhasil menyimpan data alamat!");
+
+      // console.log(Alamat, Tipe, Long, Lat, "hello handle save");
       setTipe("");
       setLong("");
       setLat("");
+      // toast('🦄 Wow so easy!', {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      //   });
     } catch (error) {
       console.error("Error saving address:", error);
     }
@@ -114,8 +126,9 @@ function Maps() {
         </div>
 
         <div className="px-5 py-5">
-          <div className="flex justify-center gap-1 ">
-            <button
+          <div className="flex justify-center gap-1 " >
+            <button 
+            disabled={Tipe == "" && inputAlamat == "" ? true : false} 
               type="button"
               onClick={handleSave}
               className="flex w-64 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

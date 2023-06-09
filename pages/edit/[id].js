@@ -73,13 +73,13 @@ function MapEditData() {
       setLong(address.Long);
       setTipe(address.Tipe);
       setSelected({lat: Number(address.Lat), lng: Number(address.Long)})
-      console.log("woy hl",{lat: Number(address.Lat), lng: Number(address.Long)})
+      // console.log("woy hl",{lat: Number(address.Lat), lng: Number(address.Long)})
     } catch (error) {
       console.error("Error fetching address:", error);
     }
   };
 
-  console.log(selected,"hello selected")
+  // console.log(selected,"hello selected")
 
   const handleUpdate = async () => {
     const Alamat = inputAlamat;
