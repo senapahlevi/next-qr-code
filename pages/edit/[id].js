@@ -13,6 +13,7 @@ import {
   LoadScript,
   MarkerF,
 } from "@react-google-maps/api";
+import { toast } from "react-toastify";
 
 export default function EditData() {
   const { isLoaded } = useLoadScript({
@@ -90,6 +91,8 @@ function MapEditData() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house-update/${id}`,
         updatedAddress
       );
+      toast.success("Berhasil update data alamat!");
+
       // router.push("/");
     } catch (error) {
       console.error("Error updating address:", error);

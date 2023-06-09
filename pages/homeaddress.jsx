@@ -61,16 +61,7 @@ function Maps() {
       setTipe("");
       setLong("");
       setLat("");
-      // toast('🦄 Wow so easy!', {
-      //   position: "top-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "light",
-      //   });
+     
     } catch (error) {
       console.error("Error saving address:", error);
     }
