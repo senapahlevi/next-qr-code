@@ -4,6 +4,7 @@ import axios from "axios";
 import Header from "./header";
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 function AllData() {
   const router = useRouter();
@@ -33,12 +34,8 @@ function AllData() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house/${ID}`
       );
       fetchAddresses();
-      toast.success('Data Berhasil Terhapus',{
-        position:'top-right',
-        autoClose:2000,
-        hideProgressBar:false,
-        closeOnClick:true,
-      });
+      toast.success("Berhasil terhapus data alamat!");
+
     } catch (error) {
       console.error("Error deleting address:", error);
     }
