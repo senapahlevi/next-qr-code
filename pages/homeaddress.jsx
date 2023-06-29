@@ -1,5 +1,5 @@
 // "use client";
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +8,7 @@ import {
    MarkerF,
    useLoadScript,
 } from "@react-google-maps/api";
- 
+
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -19,7 +19,7 @@ export default function HomeAddress() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
-
+  
   if (!isLoaded) return <div>Loading...</div>;
   return <Maps />;
 }
@@ -179,3 +179,5 @@ const PlacesAutocomplete = ({ setSelected, setInputAlamat }) => {
     </div>
   );
 };
+
+

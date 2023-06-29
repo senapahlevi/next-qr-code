@@ -3,11 +3,37 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import HomeAddress from './homeaddress'
 import Header from './header'
-import { useRef, useState } from 'react'
-async function initMap() {
+import { useEffect, useRef, useState } from 'react'
+import Coba from './coba'
+import { authMiddleware } from './utils/authMiddleware'
+import { getCookie, removeCookie } from './utils/cookie'
+import { useRouter } from 'next/router'
+import { isExpired, decodeToken } from "react-jwt";
 
-}
+
 export default function Home() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Periksa apakah pengguna sudah login dengan memeriksa keberadaan token
+    const token = getCookie('token');
+    console.log("ada tokne hello", isExpired(token) )
+    if (!token || isExpired(token)) {
+      removeCookie('token')
+      // Jika tidak ada token, redirect ke halaman login
+      router.push('/login');
+    }else {
+      // Jika ada token, beri tahu bahwa pemrosesan token selesai
+      setIsLoading(false);
+      // router.push('/')
+    }
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }  
+  
   return (
 
     <div className={styles.container}>
@@ -20,6 +46,8 @@ export default function Home() {
       </Head> */}
       <Header />
      <HomeAddress />
+     {/* <Coba /> */}
       </div>
   )
 }
+
