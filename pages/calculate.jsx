@@ -10,6 +10,8 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import { toast } from "react-toastify";
+import { getCookie } from "./utils/cookie";
+import { isExpired } from "react-jwt";
 
 export default function Calculate() {
   const { isLoaded } = useLoadScript({
@@ -35,10 +37,21 @@ function MapCalculate() {
   const [selectListOrigin, setSelectListOrigin] = React.useState(null);
   const [selectListDestination, setSelectListDestination] = React.useState(null);
   const [selectListOther, setSelectListOther] = React.useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const router = useRouter();
   useEffect(() => {
     fetchAddresses();
+    const token = getCookie("token");
+    console.log("helllo guy login", token);
+    
+    if (!token || isExpired(token)) {
+      // Jika tidak ada token, login
+      setIsLoading(false);
+      router.push("/login");
+    } 
   }, []);
-console.log(selectListOther,"heeloo selectListOther")
+ 
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
@@ -94,6 +107,7 @@ console.log(selectListOther,"heeloo selectListOther")
     width: "400px",
     height: "400px",
   };
+
 
   return (
     <div className="bg-grey-50 mb-10">

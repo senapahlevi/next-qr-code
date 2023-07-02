@@ -5,16 +5,28 @@ import Header from "./header";
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { getCookie } from "./utils/cookie";
+import { isExpired } from "react-jwt";
 
 function AllData() {
   const router = useRouter();
   const [addresses, setAddresses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleEdit = (id) => {
     router.push(`/edit/${id}`);
   };
 
   useEffect(() => {
     fetchAddresses();
+    const token = getCookie("token");
+    console.log("helllo guy login", token);
+    
+    if (!token || isExpired(token)) {
+      // Jika tidak ada token, login
+      setIsLoading(false);
+      router.push("/login");
+    } 
   }, []);
 
   const fetchAddresses = async () => {
