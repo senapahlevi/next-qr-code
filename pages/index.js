@@ -4,9 +4,8 @@ import styles from '../styles/Home.module.css'
 import HomeAddress from './homeaddress'
 import Header from './header'
 import { useEffect, useRef, useState } from 'react'
-import Coba from './coba'
-import { authMiddleware } from './utils/authMiddleware'
-import { getCookie, removeCookie } from './utils/cookie'
+import { authMiddleware } from '../utils/authMiddleware'
+import { getCookie, removeCookie } from '../utils/cookie'
 import { useRouter } from 'next/router'
 import { isExpired, decodeToken } from "react-jwt";
 import Footer from './footer'
@@ -48,8 +47,7 @@ export default function Home() {
       <Header />
      <HomeAddress />
      <Footer />
-     {/* <Coba /> */}
-      </div>
+       </div>
   )
 }
 

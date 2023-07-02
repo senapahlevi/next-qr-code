@@ -5,7 +5,7 @@ import Header from "./header";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { getCookie } from "./utils/cookie";
+import { getCookie } from "../utils/cookie";
 import { isExpired } from "react-jwt";
 import Link from "next/link";
 

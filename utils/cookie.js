@@ -4,15 +4,6 @@ import Cookies from 'js-cookie';
 import { useJwt } from "react-jwt";
 import { isExpired, decodeToken } from "react-jwt";
 
-// function decodeToken(token) {
-//   const { decodedToken, isExpired } = useJwt(token);
-//   try {
-//     return decodedToken;
-//   } catch (error) {
-//     console.error('Gagal mendekode token:', error.message);
-//     return null;
-//   }
-// }
 export function setCookie(name, value) {
   const decodedToken = decodeToken(value)
   const expiresIn = decodedToken.exp

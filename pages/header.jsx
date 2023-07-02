@@ -1,7 +1,7 @@
 // "use client";
 
 import Link from "next/link";
-import { removeCookie } from "./utils/cookie";
+import { removeCookie } from "../utils/cookie";
 import { useRouter } from "next/router";
 
 function Header() {

@@ -5,9 +5,9 @@ import Header from "./header";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { setCookie } from "./utils/cookie";
+import { setCookie } from "../utils/cookie";
 import { isExpired, decodeToken } from "react-jwt";
-import { getCookie } from "./utils/cookie";
+import { getCookie } from "../utils/cookie";
 import Link from "next/link";
 
 function Login() {

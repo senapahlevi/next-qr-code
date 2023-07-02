@@ -10,7 +10,7 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import { toast } from "react-toastify";
-import { getCookie } from "./utils/cookie";
+import { getCookie } from "../utils/cookie";
 import { isExpired } from "react-jwt";
 
 export default function Calculate() {
