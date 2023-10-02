@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+/* body {
+  font-family: "Poppins", sans-serif;
+}
+:root {
+  --white-1: #ffffff;
+  --white-2: #eeeeee;
+  --white-3: #ecf1f4;
+  --black: #000909;
+  --dark: #0a0f16;
+  --subtleGreen: #90bcb7;
+  --darkGreen: #082d28;
+  --darkTosca: #569b9b;
+  --tosca-1: #00ffd1;
+  --tosca-2: #27d7d7;
+  --tosca-3: #3fe8ff;
+  --deepTosca-1: #016a6a;
+  --deepTosca-2: #02a6a6;
+  --grey-1: #888888;
+  --grey-2: #666666;
+} */
+.text-28 {
+  font-size: 28px;
+}
+.text-24 {
+  font-size: 24px;
+}
+.text-20 {
+  font-size: 20px;
+}
+.text-white-1 {
+  color: #ffffff;
+}
+.text-white-2 {
+  color:  #eeeeee;
+}
+.text-black-1 {
+  color: #000909;
+}
+.text-grey-1 {
+  color: #888888;
+}
+.text-grey-2 {
+  color: #666666;
+}
+.text-darkGreen {
+  color: #082d28;
+}
+.text-darkTosca {
+  color: #569b9b;
+}
+.text-subtleGreen {
+  color: #90bcb7;
+}
+.bg-white-2 {
+  background-color: #eeeeee;
+}
+.leading-px40 {
+  line-height: 40px;
+}
+.leading-px36 {
+  line-height: 36px;
+}
+.max-w-screen {
+  max-width: 1440px;
+}
+.bg-gradient {
+  background: linear-gradient(
+    94.41deg,
+    #00ffd1 0%,
+    #27d7d7 52.17%,
+    #3fe8ff 100%
+  );
+}
+.gradient-button {
+  background: linear-gradient(276.78deg, #016a6a 0%, #02a6a6 100%);
+}
+.py-px72 {
+  padding: 72px 0;
+}
+.text-subscribe {
+  font-size: 24px;
+}
+@media (min-width: 768px) {
+  .w-px442 {
+    width: 442px;
+  }
+  .text-subscribe {
+    font-size: 40px;
+  }
+}

@@ -28,9 +28,7 @@ function Maps() {
   const [Tipe, setTipe] = useState("");
   const [Long, setLong] = useState("");
   const [Lat, setLat] = useState("");
-
   const [inputAlamat, setInputAlamat] = React.useState("");
-
   useEffect(() => {
     // fetchAddresses();
     if (selected) {

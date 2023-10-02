@@ -1,12 +1,13 @@
 // "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Header from "./header";
+import Header from "./headerweb";
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getCookie } from "../utils/cookie";
 import { isExpired } from "react-jwt";
+import Headerweb from "./headerweb";
 
 function AllData() {
   const router = useRouter();
@@ -55,9 +56,9 @@ function AllData() {
 
   return (
     <div className="bg-grey-50 mb-10">
-      <Header />
+      <Headerweb />
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Data Alamat Rumah
+        Data Alamat Rumahs
       </h2>
 
       <main class=" my-12 relative max-w-l mx-auto rounded">
